@@ -17,7 +17,6 @@
   --surface2: #293548;
   --border: #334155;
   --accent: #38bdf8;
-  --accent-dim: #0ea5e920;
   --text: #f1f5f9;
   --text-muted: #94a3b8;
   --text-dim: #64748b;
@@ -26,18 +25,16 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; }
-body { padding-bottom: 40px; }
+body { padding-bottom: 50px; }
 
 .header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 16px 20px 14px;
-  position: sticky; top: 0; z-index: 10;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 16px 20px 14px; position: sticky; top: 0; z-index: 10;
   display: flex; align-items: center; gap: 12px;
 }
 .logo {
-  width: 36px; height: 36px; background: var(--accent);
-  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; background: var(--accent); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
   font-size: 16px; font-weight: 600; color: #0f172a; flex-shrink: 0;
 }
 .header-text h1 { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
@@ -56,28 +53,38 @@ body { padding-bottom: 40px; }
 .field { display: flex; flex-direction: column; padding: 12px 14px; border-bottom: 1px solid var(--border); }
 .field:last-child { border-bottom: none; }
 .field label { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-bottom: 5px; letter-spacing: 0.02em; }
-.field input {
+.field input, .field select {
   background: transparent; border: none; outline: none;
-  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; width: 100%; -webkit-appearance: none;
+  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; width: 100%;
+  -webkit-appearance: none; appearance: none;
 }
 .field input::placeholder { color: var(--text-dim); }
-.field input[type="date"], .field input[type="time"] { color-scheme: dark; }
+.field select option { background: #1e293b; color: var(--text); }
+.field select.empty { color: var(--text-dim); }
 
-.row2 { display: grid; grid-template-columns: 1fr 1fr; }
-.row2 .field:first-child { border-right: 1px solid var(--border); border-bottom: none; }
+.row3 { display: grid; grid-template-columns: 2fr 1fr 1fr; }
+.row3 .field { border-right: 1px solid var(--border); border-bottom: none; }
+.row3 .field:last-child { border-right: none; }
 
 .svc-list { display: flex; flex-direction: column; gap: 10px; }
 .svc-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
 
-.svc-top {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 14px; border-bottom: 1px solid var(--border);
-}
-.svc-top input[type="text"] {
+.svc-top { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.svc-top select {
   flex: 1; background: transparent; border: none; outline: none;
   color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+  -webkit-appearance: none; appearance: none;
 }
-.svc-top input[type="text"]::placeholder { color: var(--text-dim); }
+.svc-top select option { background: #1e293b; }
+.svc-top select.empty { color: var(--text-dim); }
+
+.svc-custom-name {
+  width: 100%; background: transparent; border: none; outline: none;
+  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+  padding: 12px 14px; border-bottom: 1px solid var(--border);
+}
+.svc-custom-name::placeholder { color: var(--text-dim); }
+
 .rm-btn { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 22px; line-height: 1; padding: 2px; flex-shrink: 0; }
 .rm-btn:active { color: var(--danger); }
 
@@ -88,20 +95,18 @@ body { padding-bottom: 40px; }
 .svc-field input {
   background: transparent; border: none; outline: none;
   color: var(--text); font-family: 'DM Mono', monospace; font-size: 14px; width: 100%;
+  -webkit-appearance: none;
 }
 .svc-field input::placeholder { color: var(--text-dim); }
 .svc-field input:disabled { color: var(--text-dim); }
 
-.indeter-row {
-  display: flex; align-items: center; gap: 6px;
-  padding: 8px 12px 10px; border-top: 1px solid var(--border);
-}
-.indeter-row input[type=checkbox] { accent-color: var(--accent); width: 14px; height: 14px; flex-shrink: 0; }
-.indeter-row span { font-size: 12px; color: var(--text-muted); }
+.indeter-row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--border); }
+.indeter-row input[type=checkbox] { accent-color: var(--accent); width: 18px; height: 18px; flex-shrink: 0; }
+.indeter-row span { font-size: 13px; color: var(--text-muted); }
 
 .add-btn {
   width: 100%; background: var(--surface); border: 1px dashed var(--border);
-  border-radius: var(--radius); padding: 13px; color: var(--text-muted);
+  border-radius: var(--radius); padding: 14px; color: var(--text-muted);
   font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px;
 }
@@ -123,8 +128,7 @@ body { padding-bottom: 40px; }
   font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
   cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
 }
-.send-btn:active { opacity: 0.85; transform: scale(0.99); }
-
+.send-btn:active { opacity: 0.85; }
 .err-msg { font-size: 13px; color: var(--danger); margin-top: 12px; text-align: center; display: none; }
 </style>
 </head>
@@ -150,9 +154,25 @@ body { padding-bottom: 40px; }
 
   <p class="section-label">Date et heure *</p>
   <div class="card">
-    <div class="row2">
-      <div class="field"><label>Date</label><input type="date" id="date_rdv"></div>
-      <div class="field"><label>Heure</label><input type="time" id="heure_rdv"></div>
+    <div class="row3">
+      <div class="field">
+        <label>Jour</label>
+        <select id="sel-jour" class="empty" onchange="this.classList.remove('empty')">
+          <option value="" disabled selected>Choisir...</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Heure</label>
+        <select id="sel-heure" class="empty" onchange="this.classList.remove('empty')">
+          <option value="" disabled selected>—</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Minute</label>
+        <select id="sel-min" class="empty" onchange="this.classList.remove('empty')">
+          <option value="" disabled selected>—</option>
+        </select>
+      </div>
     </div>
   </div>
 
@@ -179,17 +199,43 @@ body { padding-bottom: 40px; }
 </div>
 
 <script>
+const JOURS_FR = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+const MOIS_FR  = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+
 const SUGGESTIONS = [
   "Conduits centraux avec fournaise",
   "Thermopompe murale",
   "Échangeur d'air",
   "Sécheuse",
+  "Autre"
 ];
+
+function initSelects() {
+  const selJour = document.getElementById('sel-jour');
+  const selH    = document.getElementById('sel-heure');
+  const selM    = document.getElementById('sel-min');
+
+  const today = new Date();
+  for (let i = 0; i <= 60; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    const dow   = JOURS_FR[d.getDay()];
+    const label = dow.charAt(0).toUpperCase()+dow.slice(1)+' '+d.getDate()+' '+MOIS_FR[d.getMonth()];
+    const val   = d.toISOString().split('T')[0];
+    selJour.appendChild(new Option(label, val));
+  }
+
+  for (let h = 8; h <= 17; h++) {
+    selH.appendChild(new Option(h+'h00', String(h).padStart(2,'0')));
+  }
+
+  ['00','15','30','45'].forEach(m => selM.appendChild(new Option(':'+m, m)));
+}
 
 let rows = [];
 
 function addSvc() {
-  rows.push({ id: Date.now(), name: "", qty: 1, dur: "", prix: "", indeter: false });
+  rows.push({ id: Date.now(), name: "", custom: "", qty: 1, dur: "", prix: "", indeter: false });
   render();
 }
 
@@ -201,7 +247,8 @@ function removeRow(id) {
 function updateRow(id, field, val) {
   const r = rows.find(r => r.id === id);
   if (!r) return;
-  if (field === 'name')    r.name    = val;
+  if (field === 'name')    { r.name = val; if (val !== 'Autre') r.custom = ''; }
+  if (field === 'custom')  r.custom  = val;
   if (field === 'qty')     r.qty     = parseInt(val) || 1;
   if (field === 'dur')     r.dur     = val;
   if (field === 'prix')    r.prix    = val;
@@ -212,7 +259,7 @@ function updateRow(id, field, val) {
 function durLabel(min) {
   min = parseInt(min) || 0;
   if (min === 0) return '—';
-  const h = Math.floor(min / 60), m = min % 60;
+  const h = Math.floor(min/60), m = min%60;
   return h > 0 ? (m > 0 ? h+'h '+m+'min' : h+'h') : m+' min';
 }
 
@@ -223,14 +270,26 @@ function render() {
   rows.forEach(r => {
     const wrap = document.createElement('div');
     wrap.className = 'svc-card';
-    const opts = SUGGESTIONS.map(s => `<option value="${s}">`).join('');
-    wrap.innerHTML = `
+
+    const opts = SUGGESTIONS.map(s =>
+      `<option value="${s}"${r.name===s?' selected':''}>${s}</option>`
+    ).join('');
+
+    let html = `
       <div class="svc-top">
-        <input type="text" list="dl-${r.id}" placeholder="Nom du service *" value="${r.name}"
-          oninput="updateRow(${r.id},'name',this.value)">
-        <datalist id="dl-${r.id}">${opts}</datalist>
+        <select class="${r.name?'':'empty'}" onchange="updateRow(${r.id},'name',this.value)">
+          <option value="" disabled ${r.name?'':'selected'}>Choisir un service...</option>
+          ${opts}
+        </select>
         <button class="rm-btn" onclick="removeRow(${r.id})" aria-label="Retirer">×</button>
-      </div>
+      </div>`;
+
+    if (r.name === 'Autre') {
+      html += `<input class="svc-custom-name" type="text" placeholder="Nom du service personnalisé..."
+        value="${r.custom}" oninput="updateRow(${r.id},'custom',this.value)">`;
+    }
+
+    html += `
       <div class="svc-bottom">
         <div class="svc-field">
           <label>Qté</label>
@@ -244,29 +303,29 @@ function render() {
         </div>
         <div class="svc-field">
           <label>Prix ($)</label>
-          <input type="number" min="0" placeholder="${r.indeter ? '—' : 'ex: 429'}"
-            value="${r.indeter ? '' : r.prix}" ${r.indeter ? 'disabled' : ''}
+          <input type="number" min="0" placeholder="${r.indeter?'—':'ex: 429'}"
+            value="${r.indeter?'':r.prix}" ${r.indeter?'disabled':''}
             onchange="updateRow(${r.id},'prix',this.value)">
         </div>
       </div>
       <div class="indeter-row">
-        <input type="checkbox" ${r.indeter ? 'checked' : ''}
-          onchange="updateRow(${r.id},'indeter',this.checked)">
+        <input type="checkbox" ${r.indeter?'checked':''} onchange="updateRow(${r.id},'indeter',this.checked)">
         <span>Prix à déterminer</span>
       </div>`;
+
+    wrap.innerHTML = html;
     list.appendChild(wrap);
   });
 
-  const totalDur = rows.reduce((s,r) => s + (parseInt(r.dur)||0) * r.qty, 0);
+  const totalDur = rows.reduce((s,r) => s + (parseInt(r.dur)||0)*r.qty, 0);
   let total = 0, hasIndet = false;
-  rows.forEach(r => { if (r.indeter) hasIndet = true; else total += (parseFloat(r.prix)||0) * r.qty; });
+  rows.forEach(r => { if (r.indeter) hasIndet = true; else total += (parseFloat(r.prix)||0)*r.qty; });
 
   const summary = document.getElementById('summary');
   if (rows.length > 0) {
     summary.style.display = 'flex';
-    document.getElementById('dur-val').textContent = durLabel(totalDur);
-    document.getElementById('total-val').textContent = hasIndet
-      ? Math.round(total) + '$ + ?' : Math.round(total) + '$';
+    document.getElementById('dur-val').textContent   = durLabel(totalDur);
+    document.getElementById('total-val').textContent = hasIndet ? Math.round(total)+'$ + ?' : Math.round(total)+'$';
   } else {
     summary.style.display = 'none';
   }
@@ -277,11 +336,12 @@ function envoyer() {
   const tel      = document.getElementById('tel').value.trim();
   const courriel = document.getElementById('courriel').value.trim();
   const adresse  = document.getElementById('adresse').value.trim();
-  const date     = document.getElementById('date_rdv').value;
-  const heure    = document.getElementById('heure_rdv').value;
+  const jour     = document.getElementById('sel-jour').value;
+  const heure    = document.getElementById('sel-heure').value;
+  const min      = document.getElementById('sel-min').value;
   const msg      = document.getElementById('val-msg');
 
-  if (!nom || !tel || !courriel || !adresse || !date || !heure || rows.length === 0) {
+  if (!nom || !tel || !courriel || !adresse || !jour || !heure || !min || rows.length === 0) {
     msg.style.display = 'block';
     msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
@@ -289,15 +349,18 @@ function envoyer() {
   msg.style.display = 'none';
 
   const svcsTexte = rows.map(r => {
-    const p = r.indeter ? 'À déterminer' : (parseFloat(r.prix)||0) + '$';
-    return `${r.name} x${r.qty} — ${p}`;
+    const nomSvc = r.name === 'Autre' ? (r.custom || 'Autre') : r.name;
+    const p = r.indeter ? 'À déterminer' : (parseFloat(r.prix)||0)+'$';
+    return `${nomSvc} x${r.qty} — ${p}`;
   }).join('\n');
 
-  const body = `c'est confirmé\n\nNom : ${nom}\nTéléphone : ${tel}\nCourriel : ${courriel}\nAdresse : ${adresse}\nDate : ${date}\nHeure : ${heure}:00\n\nServices :\n${svcsTexte}`;
+  const heureStr = heure+':'+min+':00';
+  const body = `c'est confirmé\n\nNom : ${nom}\nTéléphone : ${tel}\nCourriel : ${courriel}\nAdresse : ${adresse}\nDate : ${jour}\nHeure : ${heureStr}\n\nServices :\n${svcsTexte}`;
 
   window.location.href = `mailto:nettoyagethermo@gmail.com?subject=Confirmation RDV — ${nom}&body=${encodeURIComponent(body)}`;
 }
 
+initSelects();
 addSvc();
 </script>
 </body>
