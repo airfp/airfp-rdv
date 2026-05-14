@@ -191,7 +191,7 @@ body { padding-bottom: 50px; }
 
   <div class="err-msg" id="val-msg">Veuillez remplir tous les champs obligatoires (*).</div>
 
-  <button class="send-btn" onclick="envoyer()">
+  <button class="send-btn" id="send-btn" onclick="envoyer()">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
     Envoyer la confirmation
   </button>
@@ -205,10 +205,12 @@ const MOIS_FR  = ['janvier','février','mars','avril','mai','juin','juillet','ao
 const SUGGESTIONS = [
   "Conduits centraux avec fournaise",
   "Thermopompe murale",
-  "Échangeur d'air",
-  "Sécheuse",
+  "Echangeur air",
+  "Secheuse",
   "Autre"
 ];
+
+const WEBHOOK_URL = 'https://hook.us2.make.com/3rh318nyytp7jxgjw1zr2hti4r7nppqz';
 
 function initSelects() {
   const selJour = document.getElementById('sel-jour');
@@ -340,6 +342,7 @@ function envoyer() {
   const heure    = document.getElementById('sel-heure').value;
   const min      = document.getElementById('sel-min').value;
   const msg      = document.getElementById('val-msg');
+  const btn      = document.getElementById('send-btn');
 
   if (!nom || !tel || !courriel || !adresse || !jour || !heure || !min || rows.length === 0) {
     msg.style.display = 'block';
@@ -350,14 +353,40 @@ function envoyer() {
 
   const svcsTexte = rows.map(r => {
     const nomSvc = r.name === 'Autre' ? (r.custom || 'Autre') : r.name;
-    const p = r.indeter ? 'À déterminer' : (parseFloat(r.prix)||0)+'$';
-    return `${nomSvc} x${r.qty} — ${p}`;
-  }).join('\n');
+    const p = r.indeter ? 'A determiner' : (parseFloat(r.prix)||0)+'$';
+    return `${nomSvc} x${r.qty} - ${p}`;
+  }).join(' | ');
 
-  const heureStr = heure+':'+min+':00';
-  const body = `c'est confirmé\n\nNom : ${nom}\nTéléphone : ${tel}\nCourriel : ${courriel}\nAdresse : ${adresse}\nDate : ${jour}\nHeure : ${heureStr}\n\nServices :\n${svcsTexte}`;
+  const payload = {
+    nom: nom,
+    telephone: tel,
+    courriel: courriel,
+    adresse: adresse,
+    date: jour,
+    heure: heure+':'+min+':00',
+    services: svcsTexte
+  };
 
-  window.location.href = `mailto:nettoyagethermo@gmail.com?subject=Confirmation RDV — ${nom}&body=${encodeURIComponent(body)}`;
+  btn.textContent = 'Envoi en cours...';
+  btn.disabled = true;
+
+  fetch(WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(r => {
+    if (r.ok) {
+      btn.innerHTML = '✓ Confirmation envoyée';
+      btn.style.background = '#4ade80';
+    } else {
+      return Promise.reject();
+    }
+  })
+  .catch(() => {
+    btn.textContent = 'Erreur — réessayer';
+    btn.disabled = false;
+  });
 }
 
 initSelects();
