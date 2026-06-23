@@ -17,6 +17,8 @@
   --surface2: #293548;
   --border: #334155;
   --accent: #38bdf8;
+  --vip: #fbbf24;
+  --vip-dim: #fbbf2420;
   --text: #f1f5f9;
   --text-muted: #94a3b8;
   --text-dim: #64748b;
@@ -122,6 +124,31 @@ body { padding-bottom: 50px; }
 .summary-item span:last-child { font-size: 16px; font-weight: 600; font-family: 'DM Mono', monospace; color: var(--accent); }
 .summary-divider { width: 1px; height: 30px; background: var(--border); }
 
+.vip-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); margin-top: 10px; overflow: hidden;
+}
+.vip-toggle {
+  display: flex; align-items: center; gap: 12px; padding: 14px; cursor: pointer;
+}
+.vip-toggle input[type=checkbox] {
+  width: 20px; height: 20px; accent-color: var(--vip); flex-shrink: 0;
+}
+.vip-toggle-text { display: flex; flex-direction: column; gap: 2px; }
+.vip-toggle-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.vip-toggle-sub { font-size: 12px; color: var(--text-muted); }
+.vip-compare {
+  display: flex; border-top: 1px solid var(--border); background: var(--vip-dim);
+}
+.vip-compare-item {
+  flex: 1; display: flex; flex-direction: column; gap: 3px; align-items: center;
+  padding: 10px 8px;
+}
+.vip-compare-item:first-child { border-right: 1px solid var(--border); }
+.vip-compare-item span:first-child { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+.vip-reg-val { font-family: 'DM Mono', monospace; font-size: 14px; color: var(--text-dim); text-decoration: line-through; }
+.vip-final-val { font-family: 'DM Mono', monospace; font-size: 17px; font-weight: 600; color: var(--vip); }
+
 .send-btn {
   width: 100%; margin-top: 28px; padding: 16px; background: var(--accent);
   border: none; border-radius: var(--radius); color: #0f172a;
@@ -189,6 +216,26 @@ body { padding-bottom: 50px; }
     <div class="summary-item"><span>Total estimé</span><span id="total-val">—</span></div>
   </div>
 
+  <div class="vip-card" id="vip-card" style="display:none">
+    <label class="vip-toggle" for="vip-check">
+      <input type="checkbox" id="vip-check" onchange="render()">
+      <div class="vip-toggle-text">
+        <span class="vip-toggle-title">Inscription VIP gratuite</span>
+        <span class="vip-toggle-sub">-5% rabais immédiat sur cette soumission</span>
+      </div>
+    </label>
+    <div class="vip-compare" id="vip-compare" style="display:none">
+      <div class="vip-compare-item">
+        <span>Prix régulier</span>
+        <span class="vip-reg-val" id="vip-reg-val">—</span>
+      </div>
+      <div class="vip-compare-item">
+        <span>Prix VIP</span>
+        <span class="vip-final-val" id="vip-final-val">—</span>
+      </div>
+    </div>
+  </div>
+
   <div class="err-msg" id="val-msg">Veuillez remplir tous les champs obligatoires (*).</div>
 
   <button class="send-btn" id="send-btn" onclick="envoyer()">
@@ -211,6 +258,7 @@ const SUGGESTIONS = [
 ];
 
 const WEBHOOK_URL = 'https://hook.us2.make.com/cq70a7dh5a8g5hdhltwuyf6tf4v06gtc';
+const VIP_DISCOUNT = 0.05;
 
 function initSelects() {
   const selJour = document.getElementById('sel-jour');
@@ -324,12 +372,28 @@ function render() {
   rows.forEach(r => { if (r.indeter) hasIndet = true; else total += (parseFloat(r.prix)||0)*r.qty; });
 
   const summary = document.getElementById('summary');
+  const vipCard = document.getElementById('vip-card');
+  const vipCompare = document.getElementById('vip-compare');
+  const vipChecked = document.getElementById('vip-check').checked;
+  const suffix = hasIndet ? ' + ?' : '';
+
   if (rows.length > 0) {
     summary.style.display = 'flex';
+    vipCard.style.display = 'block';
     document.getElementById('dur-val').textContent   = durLabel(totalDur);
-    document.getElementById('total-val').textContent = hasIndet ? Math.round(total)+'$ + ?' : Math.round(total)+'$';
+    document.getElementById('total-val').textContent = Math.round(total)+'$'+suffix;
+
+    if (vipChecked) {
+      const totalVip = total * (1 - VIP_DISCOUNT);
+      vipCompare.style.display = 'flex';
+      document.getElementById('vip-reg-val').textContent   = Math.round(total)+'$'+suffix;
+      document.getElementById('vip-final-val').textContent = Math.round(totalVip)+'$'+suffix;
+    } else {
+      vipCompare.style.display = 'none';
+    }
   } else {
     summary.style.display = 'none';
+    vipCard.style.display = 'none';
   }
 }
 
@@ -341,6 +405,7 @@ function envoyer() {
   const jour     = document.getElementById('sel-jour').value;
   const heure    = document.getElementById('sel-heure').value;
   const min      = document.getElementById('sel-min').value;
+  const vip      = document.getElementById('vip-check').checked;
   const msg      = document.getElementById('val-msg');
   const btn      = document.getElementById('send-btn');
 
@@ -364,7 +429,8 @@ function envoyer() {
     adresse: adresse,
     date: jour,
     heure: heure+':'+min+':00',
-    services: svcsTexte
+    services: svcsTexte,
+    vip: vip
   };
 
   btn.textContent = 'Envoi en cours...';
